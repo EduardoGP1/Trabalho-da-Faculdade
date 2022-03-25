@@ -14,19 +14,12 @@ char marca[50]="NULL";
 char modelo[50]="NULL";
 int ano=0;
 char placa[50]="NULL";
-};
-
-struct auxiliar
-
-{
-char y[50];
-};
+}car;
 
 int main(void)
 {
 setlocale(LC_ALL,"portuguese");
 struct carro car[9];
-struct auxiliar aux[9];
 int numcar=0;
 int menu1=0;
 int menu2=0;
