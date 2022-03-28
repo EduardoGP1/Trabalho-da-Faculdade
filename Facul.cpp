@@ -1,6 +1,7 @@
 #include <iostream>
 #include <locale.h>
 #include <stdlib.h>
+#include <string.h>
 
 int menu_principal();
 void menu_compras_de_clientes();
@@ -15,23 +16,25 @@ void exibir_compras_cliente_por_nome();
 void exibir_compras_cliente_por_cpf();
 
 struct cliente{
-	short int codigo_cliente=0;
+	unsigned short int codigo_cliente=0;
 	char nome[30]="NULL";
 	short int ano_nascimento=0; 
 	float montante=0; 
 } cliente[10];
 
-struct cliente *x= (struct cliente *)malloc(10*sizeof(struct cliente));
+static unsigned short int numero_do_cliente=0; //numero do cliente=codigo do cliente
+
+struct cliente *ponteiro = (struct cliente *)malloc(10*sizeof(struct cliente));
 
 int main (){
 	
 setlocale(LC_ALL,"portuguese");
-printf("%d",sizeof(struct cliente));
 
 menu_principal();
 
 system("pause");
-system("cls");	
+system("cls");
+return 0;	
 }
 
 menu_principal(){
@@ -42,7 +45,7 @@ int resposta_valida=0;
 		printf("MENU PRINCIPAL:\n");
 		printf("1 - Incluir cliente\n");
 		printf("2 - Remover cliente\n");
-		printf("3 - Adicionar compras de um cliente");
+		printf("3 - Adicionar compras de um cliente\n");
 		printf("4 - Zerar todos os pedidos\n");
 		printf("5 - Listar melhor comprador\n");
 		printf("6 - Exibir montante de compras de um cliente\n");
@@ -89,7 +92,6 @@ void selecao(int menu_principal){
 }
 	
 void incluir_cliente(){
-static int numero_do_cliente=0; //numero do cliente=codigo do cliente
 int limite_de_memoria=1;
 int add_espaco=0;
 	if (numero_do_cliente>limite_de_memoria){
@@ -97,7 +99,7 @@ int add_espaco=0;
 		scanf("%d",&add_espaco);
 		if (add_espaco==1){
 			limite_de_memoria=limite_de_memoria+1;
-			struct cliente *x= (struct cliente *)malloc((limite_de_memoria+1)*sizeof(struct cliente));
+    		struct cliente *ponteiro = (struct cliente *) realloc(ponteiro,10*sizeof(struct cliente));
 			printf("\nFoi adicionado mais 10 espaços de memória com sucesso!\nJá pode adicionar mais clientes.");
 		}
 		else if (add_espaco==2){
@@ -110,17 +112,65 @@ int add_espaco=0;
 		}
 	}
 	printf("\n\nMENU INCLUIR CLIENTE:\n");
+	cliente[numero_do_cliente].codigo_cliente=numero_do_cliente;
+	printf("Cadastro cliente código %d",cliente[numero_do_cliente].codigo_cliente);
 	printf("\nNome do Cliente:");
 	scanf("%s",&cliente[numero_do_cliente].nome);
 	printf("Ano de Nascimento:");
 	scanf("%d",&cliente[numero_do_cliente].ano_nascimento);
-	printf("\nCliente código %d cadastrado com sucesso!\n\n",numero_do_cliente);
+	printf("\nCliente código %d cadastrado com sucesso!\n\n",cliente[numero_do_cliente].codigo_cliente);
 	numero_do_cliente++;
 	menu_principal();
 }
 
 void remover_cliente(){
-	printf("nada ainda");
+short int limpa_dados=-1;
+short int x=0;
+short int num_cliente=-1;
+	printf("\nImprimindo lista de cadastrados:\n");
+	for (x=0;x<numero_do_cliente;x++){
+		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
+		printf("Nome_______:%s\n",cliente[x].nome);
+		printf("Nascimento_:%d\n",cliente[x].ano_nascimento);
+		printf("Montante___:%0.2fR$\n\n",cliente[x].montante);
+	}
+	printf("Digite o código do cliente para excluí-lo \n(para cancelar a exclusão digite um código numérico inexistente):");
+	scanf("%d",&limpa_dados);
+	num_cliente=numero_do_cliente--;
+	if (limpa_dados==num_cliente){
+		printf("\nIniciando limpeza de dados...");
+		cliente[limpa_dados].codigo_cliente=0;
+		cliente[limpa_dados].nome[0]='\o';
+		cliente[limpa_dados].ano_nascimento=0;
+		cliente[limpa_dados].montante=0;
+		numero_do_cliente --;
+		printf("limpeza da dados concluida com sucesso!\n");
+	}
+	else if (limpa_dados<num_cliente&&limpa_dados>=0){
+		printf("\nIniciando limpeza de dados...");
+		cliente[limpa_dados].codigo_cliente=0;
+		cliente[limpa_dados].nome[0]='\o';
+		cliente[limpa_dados].ano_nascimento=0;
+		cliente[limpa_dados].montante=0;
+		for (x=limpa_dados+1;x<numero_do_cliente;x++){
+			printf("\nIniciando restruturação do sistema...\n");
+			cliente[x]=cliente[x-1];
+			//cliente[x].codigo_cliente=cliente[x].codigo_cliente--;
+		}
+		//numero_do_cliente--;
+		printf("limpeza da dados concluida com sucesso!\n");
+	}
+	else{
+		menu_principal();
+	}
+	printf("\nNova lista atualizada:\n");
+	for (x=0;x<numero_do_cliente;x++){
+		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
+		printf("Nome_______:%s\n",cliente[x].nome);
+		printf("Nascimento_:%d\n",cliente[x].ano_nascimento);
+		printf("Montante___:%0.2fR$\n\n",cliente[x].montante);
+	}
+	menu_principal();
 }
 	
 	
