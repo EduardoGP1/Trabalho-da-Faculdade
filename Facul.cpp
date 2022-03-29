@@ -125,7 +125,7 @@ int add_espaco=0;
 
 void remover_cliente(){
 short int limpa_dados=-1;
-short int x=0;
+short int x=0,y=0;
 short int num_cliente=-1;
 	printf("\nImprimindo lista de cadastrados:\n");
 	for (x=0;x<numero_do_cliente;x++){
@@ -140,7 +140,7 @@ short int num_cliente=-1;
 	if (limpa_dados==num_cliente){
 		printf("\nIniciando limpeza de dados...");
 		cliente[limpa_dados].codigo_cliente=0;
-		cliente[limpa_dados].nome[0]='\o';
+		cliente[limpa_dados].nome[0]='\0';
 		cliente[limpa_dados].ano_nascimento=0;
 		cliente[limpa_dados].montante=0;
 		numero_do_cliente --;
@@ -149,12 +149,13 @@ short int num_cliente=-1;
 	else if (limpa_dados<num_cliente&&limpa_dados>=0){
 		printf("\nIniciando limpeza de dados...");
 		cliente[limpa_dados].codigo_cliente=0;
-		cliente[limpa_dados].nome[0]='\o';
+		cliente[limpa_dados].nome[0]='\0';
 		cliente[limpa_dados].ano_nascimento=0;
 		cliente[limpa_dados].montante=0;
 		for (x=limpa_dados+1;x<numero_do_cliente;x++){
+			y=x;
 			printf("\nIniciando restruturação do sistema...\n");
-			cliente[x]=cliente[x-1];
+			cliente[y--];
 			//cliente[x].codigo_cliente=cliente[x].codigo_cliente--;
 		}
 		//numero_do_cliente--;
