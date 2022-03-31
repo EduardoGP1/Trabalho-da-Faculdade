@@ -4,10 +4,10 @@
 #include <string.h>
 
 int menu_principal();
-void menu_compras_de_clientes();
 void selecao(int);
 void incluir_cliente();
 void remover_cliente();
+void adicionar_compras();
 void zerar_todos_pedidos();
 void listar_melhor_comprador();
 void exibir_compras_cliente();
@@ -21,25 +21,22 @@ struct cliente{
 	short int ano_nascimento=0; 
 	float montante=0; 
 } cliente[10];
-
 static unsigned short int numero_do_cliente=0; //numero do cliente=codigo do cliente
-
 struct cliente *ponteiro = (struct cliente *)malloc(10*sizeof(struct cliente));
 
-int main (){
-	
+
+int main (){	
 setlocale(LC_ALL,"portuguese");
-
 menu_principal();
-
 system("pause");
 system("cls");
 return 0;	
 }
 
+
 menu_principal(){
-int menu_principal=0;
-int resposta_valida=0;
+int menu_principal=0, resposta_valida=0;
+
 
 	do{
 		printf("MENU PRINCIPAL:\n");
@@ -62,6 +59,7 @@ int resposta_valida=0;
 	selecao(menu_principal);
 }
 
+
 void selecao(int menu_principal){
 
 	switch(menu_principal) {
@@ -74,7 +72,7 @@ void selecao(int menu_principal){
 			break;
 		
 		case 3:
-			//adicionar_compras();
+			adicionar_compras();
 			break;
 		
 		case 4:
@@ -90,6 +88,7 @@ void selecao(int menu_principal){
 			break;			
 	}
 }
+	
 	
 void incluir_cliente(){
 int limite_de_memoria=1;
@@ -118,10 +117,11 @@ int add_espaco=0;
 	scanf("%s",&cliente[numero_do_cliente].nome);
 	printf("Ano de Nascimento:");
 	scanf("%d",&cliente[numero_do_cliente].ano_nascimento);
-	printf("\nCliente código %d cadastrado com sucesso!\n\n",cliente[numero_do_cliente].codigo_cliente);
 	numero_do_cliente++;
+	printf("\nCliente código %d cadastrado com sucesso!\n\n",cliente[numero_do_cliente].codigo_cliente);
 	menu_principal();
 }
+
 
 void remover_cliente(){
 short int limpa_dados=-1;
@@ -173,6 +173,19 @@ short int num_cliente=-1;
 	}
 	menu_principal();
 }
-	
+
+
+void adicionar_compras(){
+unsigned short int cod_cliente; 
+		printf("\nImprimindo lista de cadastrados:\n");
+	for (x=0;x<numero_do_cliente;x++){
+		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
+		printf("Nome_______:%s\n",cliente[x].nome);
+		printf("Nascimento_:%d\n",cliente[x].ano_nascimento);
+		printf("Montante___:%0.2fR$\n\n",cliente[x].montante);
+	}
+	printf("Digite o código do cliente:");
+	scanf("%d",&cod_cliente);
+}
 	
 
