@@ -176,7 +176,8 @@ short int num_cliente=-1;
 
 
 void adicionar_compras(){
-unsigned short int cod_cliente; 
+unsigned short int cod_cliente,x;
+float compra=0; 
 		printf("\nImprimindo lista de cadastrados:\n");
 	for (x=0;x<numero_do_cliente;x++){
 		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
@@ -186,6 +187,15 @@ unsigned short int cod_cliente;
 	}
 	printf("Digite o código do cliente:");
 	scanf("%d",&cod_cliente);
+	if (cod_cliente<0||cod_cliente>numero_do_cliente||numero_do_cliente==0){
+		printf("código não existente\n\n");
+		menu_principal();
+	}
+	printf("Digite o valor da compra(separando centavos com vírgula):");
+	scanf("%f",&compra);
+	cliente[cod_cliente].montante=cliente[cod_cliente].montante+compra;
+	printf("compra adicionada no montante com sucesso!");
+	menu_principal();
 }
 	
 
