@@ -10,10 +10,7 @@ void remover_cliente();
 void adicionar_compras();
 void zerar_todos_pedidos();
 void listar_melhor_comprador();
-void exibir_compras_cliente();
-void exibir_compras_cliente_por_codigo();
-void exibir_compras_cliente_por_nome();
-void exibir_compras_cliente_por_cpf();
+void exibir_cliente();
 
 struct cliente{
 	unsigned short int codigo_cliente=0;
@@ -21,7 +18,7 @@ struct cliente{
 	short int ano_nascimento=0; 
 	float montante=0; 
 } cliente[10];
-static unsigned short int numero_do_cliente=0; //numero do cliente=codigo do cliente
+static unsigned short int numero_de_clientes=0; //numero do cliente=codigo do cliente
 struct cliente *ponteiro = (struct cliente *)malloc(10*sizeof(struct cliente));
 
 
@@ -76,11 +73,11 @@ void selecao(int menu_principal){
 			break;
 		
 		case 4:
-			//zerar_todos_pedidos();
+			zerar_todos_pedidos();
 			break;
 	
 		case 5:
-			//listar_melhor_comprador();
+			listar_melhor_comprador();
 			break;
 	
 		case 6:
@@ -91,9 +88,9 @@ void selecao(int menu_principal){
 	
 	
 void incluir_cliente(){
-int limite_de_memoria=1;
+int limite_de_memoria=2;
 int add_espaco=0;
-	if (numero_do_cliente>limite_de_memoria){
+	if (numero_de_clientes>limite_de_memoria){
 		printf("\nLista de clientes cheia! \nDeseja habilitar mais 10 espaços de memória?\n1 - Sim.\n2 - Não.\nDigite o número de sua resposta:");
 		scanf("%d",&add_espaco);
 		if (add_espaco==1){
@@ -111,14 +108,14 @@ int add_espaco=0;
 		}
 	}
 	printf("\n\nMENU INCLUIR CLIENTE:\n");
-	cliente[numero_do_cliente].codigo_cliente=numero_do_cliente;
-	printf("Cadastro cliente código %d",cliente[numero_do_cliente].codigo_cliente);
+	cliente[numero_de_clientes].codigo_cliente=numero_de_clientes;
+	printf("Cadastro cliente código %d",cliente[numero_de_clientes].codigo_cliente);
 	printf("\nNome do Cliente:");
-	scanf("%s",&cliente[numero_do_cliente].nome);
+	scanf("%s",&cliente[numero_de_clientes].nome);
 	printf("Ano de Nascimento:");
-	scanf("%d",&cliente[numero_do_cliente].ano_nascimento);
-	numero_do_cliente++;
-	printf("\nCliente código %d cadastrado com sucesso!\n\n",cliente[numero_do_cliente].codigo_cliente);
+	scanf("%d",&cliente[numero_de_clientes].ano_nascimento);
+	numero_de_clientes++;
+	printf("\nCliente código %d cadastrado com sucesso!\n\n",cliente[numero_de_clientes].codigo_cliente);
 	menu_principal();
 }
 
@@ -128,7 +125,7 @@ short int limpa_dados=-1;
 short int x=0,y=0,z=0;
 short int num_cliente=-1;
 	printf("\nImprimindo lista de cadastrados:\n");
-	for (x=0;x<numero_do_cliente;x++){
+	for (x=0;x<numero_de_clientes;x++){
 		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
 		printf("Nome_______:%s\n",cliente[x].nome);
 		printf("Nascimento_:%d\n",cliente[x].ano_nascimento);
@@ -136,20 +133,20 @@ short int num_cliente=-1;
 	}
 	printf("Digite o código do cliente para excluí-lo \n(para cancelar a exclusão digite um código numérico inexistente):");
 	scanf("%d",&limpa_dados);
-	num_cliente=numero_do_cliente;
+	num_cliente=numero_de_clientes;
 	num_cliente--;
 	if (limpa_dados==num_cliente){
-		printf("\nIniciando limpeza de dados...");
+		printf("\nIniciando limpeza de dados...\n");
 		cliente[limpa_dados].codigo_cliente=0;
 		cliente[limpa_dados].nome[0]='\0';
 		cliente[limpa_dados].ano_nascimento=0;
 		cliente[limpa_dados].montante=0;
-		numero_do_cliente --;
+		numero_de_clientes--;
 		printf("limpeza da dados concluida com sucesso!\n");
 	}
 	else if (limpa_dados<num_cliente&&limpa_dados>=0){
 		printf("\nIniciando limpeza de dados...");
-		for (x=limpa_dados;x<numero_do_cliente;x++){
+		for (x=limpa_dados;x<numero_de_clientes;x++){
 			y=x;
 			y++;
 			for (z=0;z<=30;z++){
@@ -158,14 +155,14 @@ short int num_cliente=-1;
 			cliente[x].ano_nascimento=cliente[y].ano_nascimento;
 			cliente[x].montante=cliente[y].montante;
 		}
-		numero_do_cliente--;
+		numero_de_clientes--;
 		printf("limpeza da dados concluida com sucesso!\n");
 	}
 	else{
 		menu_principal();
 	}
 	printf("\nNova lista atualizada:\n");
-	for (x=0;x<numero_do_cliente;x++){
+	for (x=0;x<numero_de_clientes;x++){
 		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
 		printf("Nome_______:%s\n",cliente[x].nome);
 		printf("Nascimento_:%d\n",cliente[x].ano_nascimento);
@@ -179,7 +176,7 @@ void adicionar_compras(){
 unsigned short int cod_cliente,x;
 float compra=0; 
 		printf("\nImprimindo lista de cadastrados:\n");
-	for (x=0;x<numero_do_cliente;x++){
+	for (x=0;x<numero_de_clientes;x++){
 		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
 		printf("Nome_______:%s\n",cliente[x].nome);
 		printf("Nascimento_:%d\n",cliente[x].ano_nascimento);
@@ -187,15 +184,80 @@ float compra=0;
 	}
 	printf("Digite o código do cliente:");
 	scanf("%d",&cod_cliente);
-	if (cod_cliente<0||cod_cliente>numero_do_cliente||numero_do_cliente==0){
+	if (cod_cliente<0||cod_cliente>numero_de_clientes||numero_de_clientes==0){
 		printf("código não existente\n\n");
 		menu_principal();
 	}
-	printf("Digite o valor da compra(separando centavos com vírgula):");
+	printf("Digite o valor da compra(separando centavos com vírgula):R$");
 	scanf("%f",&compra);
 	cliente[cod_cliente].montante=cliente[cod_cliente].montante+compra;
-	printf("compra adicionada no montante com sucesso!");
+	printf("compra adicionada no montante com sucesso!\n\n");
 	menu_principal();
 }
 	
+void zerar_todos_pedidos(){
+int confirma=0,x;
+	printf("\n1 - Confirmar\n2 - Cancelar\nZerar todos os pedidos?");
+	scanf("%d",&confirma);
+	if (confirma==1){
+		for (x=0;x<numero_de_clientes;x++){
+			cliente[x].montante=0;
+		}
+		printf("Montantes dos clientes foram zerados\n\n!");
+		menu_principal();
+	}
+	else if (confirma==2){
+		printf("Zerar os pedidos cancelado!\n\n");
+		menu_principal();
+	}
+	else{
+		printf("Resposta inválida!\n\n");
+		menu_principal();
+	}
+}
 
+void listar_melhor_comprador(){
+unsigned short int cliente1=0,cliente2,lista[numero_de_clientes-1],clientex=0,x;
+	if (numero_de_clientes==0){
+		printf("\nNão possui clientes!\n\n");
+		menu_principal();
+	}
+	else if (numero_de_clientes==1){
+		printf("\nCódigo_____:%d\n",cliente[0].codigo_cliente);
+		printf("Nome_______:%s\n",cliente[0].nome);
+		printf("Nascimento_:%d\n",cliente[0].ano_nascimento);
+		printf("Montante___:%0.2fR$\n\n",cliente[0].montante);
+		menu_principal();
+	}
+	else if (numero_de_clientes>1){
+		cliente2=1;
+		for (cliente1=0;cliente2<numero_de_clientes;cliente1++){
+			if (cliente[cliente1].montante>cliente[cliente2].montante){
+				lista[0]='\0';
+				clientex=0;
+				lista[clientex]=cliente1;
+			}
+			else if (cliente[cliente2].montante>cliente[cliente1].montante){
+				lista[0]='\0';
+				clientex=0;
+				lista[clientex]=cliente2;
+			}
+			else {
+				lista[clientex]=cliente1;
+				clientex++;
+				lista[clientex]=cliente2;
+				clientex++;
+			}
+		}
+		clientex--;
+		printf("aqui");
+		for(x=0;x<=clientex;x++){
+		printf("%d",lista[x]);
+		}
+		menu_principal();
+	}
+	else{
+		printf("o programa está com algum problema, contate o desenvolvedor");
+	}
+	printf("%s",lista);
+}
