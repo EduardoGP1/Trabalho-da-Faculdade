@@ -10,11 +10,11 @@ void remover_cliente();
 void adicionar_compras();
 void zerar_todos_pedidos();
 void listar_melhor_comprador();
-void exibir_cliente();
+void exibir_compras_cliente();
 
 struct cliente{
 	unsigned short int codigo_cliente=0;
-	char nome[30]="NULL";
+	char nome[30]="\0";
 	short int ano_nascimento=0; 
 	float montante=0; 
 } cliente[10];
@@ -33,8 +33,6 @@ return 0;
 
 menu_principal(){
 int menu_principal=0, resposta_valida=0;
-
-
 	do{
 		printf("MENU PRINCIPAL:\n");
 		printf("1 - Incluir cliente\n");
@@ -45,7 +43,7 @@ int menu_principal=0, resposta_valida=0;
 		printf("6 - Exibir montante de compras de um cliente\n");
 		printf("Digite o número da opção desejada:");
 		scanf("%d", &menu_principal);
-		if (menu_principal>0&&menu_principal<6){
+		if (menu_principal>0&&menu_principal<7){
 			resposta_valida=1;
 			}
 		else{
@@ -58,7 +56,6 @@ int menu_principal=0, resposta_valida=0;
 
 
 void selecao(int menu_principal){
-
 	switch(menu_principal) {
 		case 1:
 			incluir_cliente();
@@ -81,7 +78,7 @@ void selecao(int menu_principal){
 			break;
 	
 		case 6:
-			//exibir_compras_cliente();
+			exibir_compras_cliente();
 			break;			
 	}
 }
@@ -114,8 +111,8 @@ int add_espaco=0;
 	scanf("%s",&cliente[numero_de_clientes].nome);
 	printf("Ano de Nascimento:");
 	scanf("%d",&cliente[numero_de_clientes].ano_nascimento);
+	printf("\nCliente código %d cadastrado com sucesso!\n\n",numero_de_clientes);
 	numero_de_clientes++;
-	printf("\nCliente código %d cadastrado com sucesso!\n\n",cliente[numero_de_clientes].codigo_cliente);
 	menu_principal();
 }
 
@@ -159,6 +156,7 @@ short int num_cliente=-1;
 		printf("limpeza da dados concluida com sucesso!\n");
 	}
 	else{
+		printf("Código inexistente\n\n");
 		menu_principal();
 	}
 	printf("\nNova lista atualizada:\n");
@@ -175,7 +173,7 @@ short int num_cliente=-1;
 void adicionar_compras(){
 unsigned short int cod_cliente,x;
 float compra=0; 
-		printf("\nImprimindo lista de cadastrados:\n");
+	printf("\nImprimindo lista de cadastrados:\n");
 	for (x=0;x<numero_de_clientes;x++){
 		printf("\nCódigo_____:%d\n",cliente[x].codigo_cliente);
 		printf("Nome_______:%s\n",cliente[x].nome);
@@ -194,6 +192,7 @@ float compra=0;
 	printf("compra adicionada no montante com sucesso!\n\n");
 	menu_principal();
 }
+
 	
 void zerar_todos_pedidos(){
 int confirma=0,x;
@@ -216,8 +215,9 @@ int confirma=0,x;
 	}
 }
 
+
 void listar_melhor_comprador(){
-unsigned short int cliente1=0,cliente2,lista[numero_de_clientes-1],clientex=0,x;
+unsigned short int cliente1=0,cliente2,lista[numero_de_clientes],clientex=0,x;
 	if (numero_de_clientes==0){
 		printf("\nNão possui clientes!\n\n");
 		menu_principal();
@@ -236,28 +236,49 @@ unsigned short int cliente1=0,cliente2,lista[numero_de_clientes-1],clientex=0,x;
 				lista[0]='\0';
 				clientex=0;
 				lista[clientex]=cliente1;
+				clientex=1;
 			}
-			else if (cliente[cliente2].montante>cliente[cliente1].montante){
+			else if (cliente[cliente1].montante<cliente[cliente2].montante){
 				lista[0]='\0';
 				clientex=0;
 				lista[clientex]=cliente2;
+				clientex=1;
 			}
-			else {
-				lista[clientex]=cliente1;
-				clientex++;
+			else if (cliente[cliente1].montante==cliente[cliente2].montante){
+				if (cliente1==0){
+					lista[clientex]=cliente1;
+					clientex++;
+				}
+				if (lista[clientex-1]!=cliente1){
+					lista[clientex]=cliente1;
+					clientex++;
+				}
 				lista[clientex]=cliente2;
 				clientex++;
 			}
+			cliente2++;
 		}
-		clientex--;
-		printf("aqui");
-		for(x=0;x<=clientex;x++){
-		printf("%d",lista[x]);
+		
+		for(x=0;x<clientex;x++){
+		printf("%d\n",lista[x]);
 		}
+		printf("\n");
 		menu_principal();
 	}
 	else{
 		printf("o programa está com algum problema, contate o desenvolvedor");
 	}
-	printf("%s",lista);
+}
+
+
+void exibir_compras_cliente(){
+int codigo;
+	printf("\nDigite o código do cliente a exibir montante:");
+	scanf("%d",&codigo);
+	if (codigo<0||codigo>=numero_de_clientes){
+		printf("Lamento, esse código não existe\n\n");
+		menu_principal();
+	}
+	printf("\nO montante de compras do cliente %s é %0.2fR$\n\n",cliente[codigo].nome,cliente[codigo].montante);
+	menu_principal();
 }
